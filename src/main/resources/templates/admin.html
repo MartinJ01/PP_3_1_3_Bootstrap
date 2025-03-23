@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">User Management</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('login')">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('admin')">Admin Panel</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('addUser')">Add User</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('editUser')">Edit User</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('deleteUser')">Delete User</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('userInfo')">User Info</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <!-- Login Section -->
+    <div id="login" class="section active">
+        <h1>Please sign in</h1>
+        <form th:action="@{/login}" method="post">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Sign in</button>
+        </form>
+    </div>
+
+    <!-- Admin Panel Section -->
+    <div id="admin" class="section">
+        <h1>Admin Panel</h1>
+        <a href="#" onclick="showSection('addUser')" class="btn btn-success mb-3">New User</a>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Age</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.firstName}"></td>
+                <td th:text="${user.lastName}"></td>
+                <td th:text="${user.age}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.roles}"></td>
+                <td>
+                    <a href="#" onclick="showSection('editUser')" class="btn btn-primary">Edit</a>
+                    <a href="#" onclick="showSection('deleteUser')" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Add User Section -->
+    <div id="addUser" class="section">
+        <h1>Add New User</h1>
+        <form th:action="@{/user/new}" method="post">
+            <div class="mb-3">
+                <label for="firstName" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="firstName" name="firstName" required>
+            </div>
+            <div class="mb-3">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="lastName" name="lastName" required>
+            </div>
+            <div class="mb-3">
+                <label for="age" class="form-label">Age</label>
+                <input type="number" class="form-control" id="age" name="age" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="mb-3">
+                <label for="roles" class="form-label">Role</label>
+                <select class="form-select" id="roles" name="roles" multiple>
+                    <option value="ADMIN">ADMIN</option>
+                    <option value="USER">USER</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Add New User</button>
+        </form>
+    </div>
+
+    <!-- Edit User Section -->
+    <div id="editUser" class="section">
+        <h1>Edit User</h1>
+        <form th:action="@{/user/edit/{id}(id=${user.id})}" method="post">
+            <div class="mb-3">
+                <label for="firstName" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="firstName" name="firstName" th:value="${user.firstName}" required>
+            </div>
+            <div class="mb-3">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="lastName" name="lastName" th:value="${user.lastName}" required>
+            </div>
+            <div class="mb-3">
+                <label for="age" class="form-label">Age</label>
+                <input type="number" class="form-control" id="age" name="age" th:value="${user.age}" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" th:value="${user.email}" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password">
+            </div>
+            <div class="mb-3">
+                <label for="roles" class="form-label">Role</label>
+                <select class="form-select" id="roles" name="roles" multiple>
+                    <option value="ADMIN">ADMIN</option>
+                    <option value="USER">USER</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Edit</button>
+            <a href="#" onclick="showSection('admin')" class="btn btn-secondary">Close</a>
+        </form>
+    </div>
+
+    <!-- Delete User Section -->
+    <div id="deleteUser" class="section">
+        <h1>Delete User</h1>
+        <div class="card">
+            <div class="card-body">
+                <p><strong>ID:</strong> <span th:text="${user.id}"></span></p>
+                <p><strong>First Name:</strong> <span th:text="${user.firstName}"></span></p>
+                <p><strong>Last Name:</strong> <span th:text="${user.lastName}"></span></p>
+                <p><strong>Age:</strong> <span th:text="${user.age}"></span></p>
+                <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+                <p><strong>Role:</strong> <span th:text="${user.roles}"></span></p>
+                <form th:action="@{/user/delete/{id}(id=${user.id})}" method="post">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <a href="#" onclick="showSection('admin')" class="btn btn-secondary">Close</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Info Section -->
+    <div id="userInfo" class="section">
+        <h1>User Information</h1>
+        <div class="card">
+            <div class="card-body">
+                <p><strong>ID:</strong> <span th:text="${user.id}"></span></p>
+                <p><strong>First Name:</strong> <span th:text="${user.firstName}"></span></p>
+                <p><strong>Last Name:</strong> <span th:text="${user.lastName}"></span></p>
+                <p><strong>Age:</strong> <span th:text="${user.age}"></span></p>
+                <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+                <p><strong>Role:</strong> <span th:text="${user.roles}"></span></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showSection(sectionId) {
+        document.querySelectorAll('.section').forEach(section => {
+            section.classList.remove('active');
+        });
+        document.getElementById(sectionId).classList.add('active');
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
