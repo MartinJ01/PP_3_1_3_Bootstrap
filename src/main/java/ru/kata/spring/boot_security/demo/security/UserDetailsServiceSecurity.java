@@ -7,10 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
-import javax.transaction.Transactional;
-
 @Service
-@Transactional
 public class UserDetailsServiceSecurity implements UserDetailsService {
 
     private final UserRepository userRepository;
@@ -24,7 +21,6 @@ public class UserDetailsServiceSecurity implements UserDetailsService {
     }
 
     @Override
-    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = findByUsername(username);
         System.out.println(user.getRoles());
@@ -33,12 +29,5 @@ public class UserDetailsServiceSecurity implements UserDetailsService {
         }
 
         return user;
-
-        /*List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toList());
-
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-                authorities);*/
     }
 }

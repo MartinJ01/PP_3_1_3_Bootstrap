@@ -9,27 +9,23 @@ import javax.persistence.*;
 import java.util.*;
 
 @Setter
+@Getter
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
-    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Getter
     @Column(name = "first_name")
     private String firstName;
 
-    @Getter
     @Column(name = "last_name")
     private String lastName;
 
-    @Getter
     @Column(name = "age")
     private int age;
 
-    @Getter
     @Column(name = "email", unique = true)
     private String email;
 
@@ -39,7 +35,6 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @Getter
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
